@@ -15,6 +15,7 @@
 import ast
 import logging
 from typing import TypeAlias
+import pathlib
 
 
 logger = logging.getLogger()
@@ -180,5 +181,9 @@ if __name__ == '__main__':
     total_code += '\n\n\n'
     total_code += code_without_imports.strip()
 
-    with open('smart_replays.py', 'w', encoding='utf-8') as f:
+    pathlib.Path("build").mkdir(parents=True, exist_ok=True)
+
+    with open('build/smart_replays.py', 'w', encoding='utf-8') as f:
         f.write(total_code)
+
+    logger.info("Build saved to build/smart_replays.py.")
