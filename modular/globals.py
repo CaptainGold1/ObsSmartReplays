@@ -99,6 +99,7 @@ class PropertiesNames:
     TXT_CLIPS_LINKS_FOLDER_PATH_WARNING = "clips_links_folder_path_warning"
 
     PROP_CLIPS_USE_ROBLOX_GAME_NAME = "clips_use_roblox_game_name"
+    PROP_CLIPS_USE_ROBLOX_PARENT_FOLDER = "clips_use_roblox_parent_folder"
 
     # Videos path settings
     PROP_VIDEOS_NAMING_MODE = "videos_naming_mode"

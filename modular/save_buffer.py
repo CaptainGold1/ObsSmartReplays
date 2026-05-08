@@ -11,6 +11,7 @@
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU Affero General Public License for more details.
+from multiprocessing.dummy import current_process
 
 from .globals import VARIABLES, CONSTANTS, PN, ClipNamingModes
 from .obs_related import get_last_replay_file_name, get_base_path
@@ -30,11 +31,17 @@ def move_clip_file(mode: ClipNamingModes | None = None) -> tuple[str, Path]:
     ext = old_file_path.split(".")[-1]
     filename_template = obs.obs_data_get_string(VARIABLES.script_settings,
                                                 PN.PROP_CLIPS_FILENAME_TEMPLATE)
-    filename = gen_filename(clip_name, filename_template) + f".{ext}"
+    if isinstance(clip_name, str):
+        filename = gen_filename(clip_name, filename_template) + f".{ext}"
+    else:
+        filename = gen_filename(clip_name[1], filename_template) + f".{ext}"
 
     new_folder = Path(get_base_path(script_settings=VARIABLES.script_settings))
     if obs.obs_data_get_bool(VARIABLES.script_settings, PN.PROP_CLIPS_SAVE_TO_FOLDER):
-        new_folder = new_folder / clip_name
+        if isinstance(clip_name, str):
+            new_folder = new_folder / clip_name
+        else:
+            new_folder = new_folder / clip_name[0] / clip_name[1]
 
     os.makedirs(str(new_folder), exist_ok=True)
     new_path = new_folder / filename
