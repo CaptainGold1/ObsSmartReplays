@@ -40,10 +40,19 @@ This script also has additional functionality, such as sound and pop-up notifica
 
 # Requirements
 OS: Windows 10 or higher
+
 Python 3.10 or higher
-The script does not require any third-party libraries, however, Python must be installed together with `Tkinter`.
+
+The script requires python to be installed (with `Tkinter`), and two third-party libraries to be installed in the python environment used by OBS: `regex` and `requests`.
 
 ![python_installing](https://github.com/user-attachments/assets/1d798ed9-2284-4759-9180-e7486012e1e7)
+
+To install the dependencies in the correct environment, use the following terminal commands (replace `python3.12` with the version of python you're using):
+
+```shell
+python3.12 -m pip install regex
+python3.12 -m pip install requests
+```
 
 <hr />
 
