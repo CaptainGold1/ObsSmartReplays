@@ -18,7 +18,6 @@ from .tech import _print
 import os
 import regex as re
 import pathlib
-import urllib
 import requests
 
 

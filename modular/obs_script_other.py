@@ -40,6 +40,7 @@ def script_defaults(s):
     obs.obs_data_set_default_string(s, PN.PROP_CLIPS_LINKS_FOLDER_PATH, str(get_base_path() / '_links'))
 
     obs.obs_data_set_default_bool(s, PN.PROP_CLIPS_USE_ROBLOX_GAME_NAME, True)
+    obs.obs_data_set_default_bool(s, PN.PROP_CLIPS_USE_ROBLOX_PARENT_FOLDER, True)
 
     # obs.obs_data_set_default_int(s, PN.PROP_VIDEOS_NAMING_MODE, VideoNamingModes.MOST_RECORDED_PROCESS.value)
     # obs.obs_data_set_default_string(s, PN.PROP_VIDEOS_FILENAME_FORMAT, CONSTANTS.DEFAULT_FILENAME_FORMAT)

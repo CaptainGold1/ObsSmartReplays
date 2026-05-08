@@ -21,7 +21,8 @@ from .properties_callbacks import (open_github_callback,
                                    check_filename_template_callback,
                                    update_aliases_callback,
                                    update_links_path_prop_visibility,
-                                   check_clips_links_folder_path_callback)
+                                   check_clips_links_folder_path_callback,
+                                   update_use_roblox_parent_folder_prop_visibility)
 from .obs_related import get_base_path
 
 import obspython as obs
@@ -176,13 +177,24 @@ def setup_clip_paths_settings(group_obj):
     obs.obs_property_set_visible(t, False)
 
     # ----- Save to folders checkbox -----
-    obs.obs_properties_add_bool(
+    save_to_folders_prop = obs.obs_properties_add_bool(
         props=group_obj,
         name=PN.PROP_CLIPS_SAVE_TO_FOLDER,
         description="Sort clips into folders by application or scene",
     )
 
-    # ----- Create links -----
+    # ----- Roblox parent folder checkbox -----
+    roblox_parent_folder_prop = obs.obs_properties_add_bool(
+        props=group_obj,
+        name=PN.PROP_CLIPS_USE_ROBLOX_PARENT_FOLDER,
+        description="Group Roblox clips under a parent Roblox folder"
+    )
+
+    obs.obs_property_set_enabled(roblox_parent_folder_prop,
+                                 obs.obs_data_get_bool(VARIABLES.script_settings,
+                                                       PN.PROP_CLIPS_SAVE_TO_FOLDER))
+
+# ----- Create links -----
     create_links_prop = obs.obs_properties_add_bool(
         props=group_obj,
         name=PN.PROP_CLIPS_CREATE_LINKS,
@@ -219,6 +231,8 @@ def setup_clip_paths_settings(group_obj):
     obs.obs_property_set_modified_callback(filename_format_prop, check_filename_template_callback)
     obs.obs_property_set_modified_callback(create_links_prop, update_links_path_prop_visibility)
     obs.obs_property_set_modified_callback(links_path_prop, check_clips_links_folder_path_callback)
+
+    obs.obs_property_set_modified_callback(save_to_folders_prop, update_use_roblox_parent_folder_prop_visibility)
 
 
 def setup_video_paths_settings(group_obj):

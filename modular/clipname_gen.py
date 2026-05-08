@@ -24,14 +24,15 @@ from datetime import datetime
 import traceback
 
 
-def gen_clip_base_name(mode: ClipNamingModes | None = None) -> str:
+def gen_clip_base_name(mode: ClipNamingModes | None = None) -> str | tuple[str, str]:
     """
     Generates the base name of the clip based on the selected naming mode.
     It does NOT generate a new path for the clip or filename, only its base name.
 
     :param mode: Clip naming mode. If None, the mode is fetched from the script config.
                  If a value is provided, it overrides the configs value.
-    :return: The base name of the clip based on the selected naming mode.
+    :return: Either the base name of the clip based on the selected naming mode OR
+             a tuple containing a subdirectory in which the clip should be placed and the clip's name (if applicable).
     """
     _print("Generating clip base name...")
     mode = obs.obs_data_get_int(VARIABLES.script_settings, PN.PROP_CLIPS_NAMING_MODE) if mode is None else mode
@@ -56,23 +57,33 @@ def gen_clip_base_name(mode: ClipNamingModes | None = None) -> str:
         # Handles different Roblox games
         # Checks if a clip is being saved for RobloxPlayerBeta, and if so, searches for the currently visited place if exists
         # If the player is not in a place currently it defaults to regular behavior
+        subname: str | None = None
         if executable_path.name == "RobloxPlayerBeta.exe":
             _print("Detected Roblox being played.")
             if obs.obs_data_get_bool(VARIABLES.script_settings, PN.PROP_CLIPS_USE_ROBLOX_GAME_NAME):
                 _print("Attempting to use Roblox game name to name file")
                 if game_name := get_current_roblox_game_name():
                     _print(f"Using game name {game_name}")
-                    return game_name
-
+                    if obs.obs_data_get_bool(VARIABLES.script_settings, PN.PROP_CLIPS_USE_ROBLOX_PARENT_FOLDER):
+                        _print("Setting subfolder name")
+                        subname = game_name
+                    else:
+                        return game_name
 
         _print(f'Searching for {executable_path} in aliases list...')
         if alias := get_alias(executable_path, VARIABLES.aliases):
             _print(f'Alias found: {alias}.')
-            return alias
+            if subname:
+                return alias, subname
+            else:
+                return alias
         else:
             _print(f"{executable_path} or its parents weren't found in aliases list. "
                    f"Assigning the name of the executable: {executable_path.stem}")
-            return executable_path.stem
+            if subname:
+                return executable_path.stem, subname
+            else:
+                return executable_path.stem
 
     else:
         _print("Clip filename depends on the name of the current scene name.")

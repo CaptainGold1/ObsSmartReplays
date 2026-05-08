@@ -113,6 +113,12 @@ def update_links_path_prop_visibility(p, prop, data):
     return True
 
 
+def update_use_roblox_parent_folder_prop_visibility(p, prop, data):
+    rpf_prop = obs.obs_properties_get(p, PN.PROP_CLIPS_USE_ROBLOX_PARENT_FOLDER)
+    obs.obs_property_set_enabled(rpf_prop, obs.obs_data_get_bool(data, obs.obs_property_name(prop)))
+    return True
+
+
 def check_clips_links_folder_path_callback(p, prop, data):
     """
     Checks clips links folder path is in the same disk as OBS recordings path.
