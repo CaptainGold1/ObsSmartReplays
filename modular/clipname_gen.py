@@ -16,6 +16,7 @@ from .globals import VARIABLES, CONSTANTS, PN, ClipNamingModes
 
 from .tech import get_active_window_pid, get_executable_path, _print
 from .obs_related import get_current_scene_name
+from .roblox_handlers import get_current_roblox_game_name
 
 import obspython as obs
 from pathlib import Path
@@ -51,6 +52,18 @@ def gen_clip_base_name(mode: ClipNamingModes | None = None) -> str:
                 executable_path = max(VARIABLES.clip_exe_history, key=VARIABLES.clip_exe_history.count)
             else:
                 executable_path = get_executable_path(get_active_window_pid())
+
+        # Handles different Roblox games
+        # Checks if a clip is being saved for RobloxPlayerBeta, and if so, searches for the currently visited place if exists
+        # If the player is not in a place currently it defaults to regular behavior
+        if executable_path.name == "RobloxPlayerBeta.exe":
+            _print("Detected Roblox being played.")
+            if obs.obs_data_get_bool(VARIABLES.script_settings, PN.PROP_CLIPS_USE_ROBLOX_GAME_NAME):
+                _print("Attempting to use Roblox game name to name file")
+                if game_name := get_current_roblox_game_name():
+                    _print(f"Using game name {game_name}")
+                    return game_name
+
 
         _print(f'Searching for {executable_path} in aliases list...')
         if alias := get_alias(executable_path, VARIABLES.aliases):

@@ -98,6 +98,8 @@ class PropertiesNames:
     PROP_CLIPS_LINKS_FOLDER_PATH = "clips_links_folder_path"
     TXT_CLIPS_LINKS_FOLDER_PATH_WARNING = "clips_links_folder_path_warning"
 
+    PROP_CLIPS_USE_ROBLOX_GAME_NAME = "clips_use_roblox_game_name"
+
     # Videos path settings
     PROP_VIDEOS_NAMING_MODE = "videos_naming_mode"
     TXT_VIDEOS_HOTKEY_TIP = "videos_hotkey_tip"

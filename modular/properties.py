@@ -149,6 +149,13 @@ def setup_clip_paths_settings(group_obj):
     )
     obs.obs_property_text_set_info_type(t, obs.OBS_TEXT_INFO_WARNING)
 
+    # ----- Roblox game name setting -----
+    obs.obs_properties_add_bool(
+        props=group_obj,
+        name=PN.PROP_CLIPS_USE_ROBLOX_GAME_NAME,
+        description="Roblox: Name clips based on the game currently being played"
+    )
+
     # ----- Clip file name format -----
     filename_format_prop = obs.obs_properties_add_text(
         props=group_obj,
